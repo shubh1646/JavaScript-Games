@@ -53,6 +53,7 @@ function create() {
     background.setOrigin(0, 0);
     background.displayWidth = W//expand this sky strip
     background.displayHeight = H;
+    background.depth = -2;
 
 
     let ground = this.add.tileSprite(0, H - 128, W, 128, 'ground');
@@ -77,11 +78,50 @@ function create() {
      let cloud3 = this.add.sprite(1500,150,'cloud');   // if we descrese value here it will do up 
      let cloud4 = this.add.sprite(1800,450,'cloud');
      
-    //
+    //Ray of sun 
     
+   
+    
+    //creating multiple rays using arra
+    let rays = [];
+    
+    for(let i = -10 ; i<=10 ; i++){
+    let ray =  this.add.sprite(W/2,H-128,"ray");   //100 px from bottom it takes 100 from center of image
+    //but we want the bottom of image as center of image so we change the anchor point
+    ray.setOrigin(0.5,1);
+    ray.displayHeight = 1.5*H;
+    ray.alpha  = 0.2; //give transperency 
+    ray.angle = i*25;
+    ray.depth = -1;
+    rays.push(ray);
+    }
+    
+    console.log(rays);
     //so that player cannot go outside the frame
     this.player.setCollideWorldBounds(true);
     
+    //create a tween for animation of rays
+//    this.tweens.add({
+//        targets: rays,
+//        probs:{
+//            angle:{
+//                value : "+=20",
+//            }
+//        },
+//        duration : 9000,
+//        repeat : -1,
+//    });
+      
+    this.tweens.add({
+        targets: rays,
+        props:{
+            angle:{
+                value : "+=20"
+            },
+        },
+        duration : 8000,
+        repeat : -1
+    });
     
     
     
@@ -183,7 +223,7 @@ function create() {
     this.cameras.main.setBounds(0,0,W,H);
     this.physics.world.setBounds(0,0,W,H);
     this.cameras.main.startFollow(this.player,true,true);
-   this.cameras.main.setZoom(1.3);
+    this.cameras.main.setZoom(1.3);
     
     
     
